@@ -11,23 +11,18 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
-      // messages: [
-      //   {
-      //     id: 1,
-      //     username: "Bob",
-      //     content: "Has anyone seen my marbles?",
-      //   },
-      //   {
-      //     id: 2,
-      //     username: "Anonymous",
-      //     content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-      //   }
-      // ],
     };
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
+    this.socket.onmessage = (event) => {
+      const newMsg = JSON.parse(event.data);
+      this.setState((prevState) => {
+        prevState.messages.push(newMsg);
+        this.setState({messages: prevState.messages});
+      });
+    }
   }
 
   render() {
@@ -48,9 +43,7 @@ class App extends Component {
       username: username,
       content: content
     };
-    console.log("here sends to server:", JSON.stringify(newMsg));
     this.socket.send(JSON.stringify(newMsg));
-    // this.setState({messages: this.state.messages.concat(newMsg)});
   }
 }
 export default App;
