@@ -9,9 +9,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      notification: "",
       counter: 0
     };
   }
@@ -22,8 +21,10 @@ class App extends Component {
       const msg = JSON.parse(event.data);
       switch(msg.type) {
         case "incomingNotification":
-          console.log(event.data);
-          this.setState({notification: `User ${msg.data.prevName} changed their name to ${msg.data.newName}`});
+          this.setState((prevState) => {
+            prevState.messages.push(msg.data);
+            this.setState({message: prevState.messages});
+          });
           break;
         case "incomingMessage":
           this.setState((prevState) => {
@@ -49,7 +50,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
           <span className=".navbar-counter">{this.state.counter} users online</span>
         </nav>
-        <MessageList messages={this.state.messages} notification={this.state.notification}/>
+        <MessageList messages={this.state.messages}/>
         <ChatBar name={this.state.currentUser.name} updateUser={this._updateUser} addMessage={this._addMessage}/>
       </div>
     );
