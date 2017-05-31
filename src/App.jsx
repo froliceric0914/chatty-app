@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      notification: ""
+      notification: "",
+      counter: 0
     };
   }
 
@@ -30,6 +31,10 @@ class App extends Component {
             this.setState({messages: prevState.messages});
           });
           break;
+        case "incomingCounter":
+          console.log("change counter:", msg.data);
+          this.setState({counter: msg.data});
+          break;
         default:
           console.error("Unknown event type " + msg.type);
       }
@@ -42,6 +47,7 @@ class App extends Component {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span className=".navbar-counter">{this.state.counter} users online</span>
         </nav>
         <MessageList messages={this.state.messages} notification={this.state.notification}/>
         <ChatBar name={this.state.currentUser.name} updateUser={this._updateUser} addMessage={this._addMessage}/>
