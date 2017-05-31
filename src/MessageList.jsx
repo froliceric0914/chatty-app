@@ -18,6 +18,7 @@ class MessageList extends Component {
             <Message key={msg.id.toString()} username={msg.username} content={msg.content}/>
             );
         })}
+        <div className="message system">{this.props.notification}</div>
       </div>
     );
   }
