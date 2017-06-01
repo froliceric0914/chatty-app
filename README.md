@@ -4,7 +4,7 @@ Chatty-app Project
 Chatty allows users to communicate with each other without having to register accounts. It uses React, a popular front-end library created and used heavily by Facebook as well as modern tools for Node including Webpack and Babel.
 
 ### Final Product
-!["chart-room"]()
+!["chart-room"](https://github.com/vivienfan/chatty-app/blob/master/documents/chatty-app.png?raw=true)
 
 
 ### Usage
