@@ -17,7 +17,8 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    this.socket.onopen = (e) => {
+    // register at the server, to get a color
+    this.socket.onopen = (event) => {
       this.socket.send(JSON.stringify({ type: "postRegister" }));
     }
 
@@ -25,18 +26,17 @@ class App extends Component {
       console.log("Received:", event.data);
       const msg = JSON.parse(event.data);
       switch(msg.type) {
+        // on receiving either notification or message from the server
+        // push them all into the state message
         case "incomingNotification":
-          this.setState((prevState) => {
-            prevState.messages.push(msg.data);
-            this.setState({messages: prevState.messages});
-          });
-          break;
         case "incomingMessage":
           this.setState((prevState) => {
             prevState.messages.push(msg.data);
             this.setState({messages: prevState.messages});
           });
           break;
+        // on reveiving the total online user count
+        // update the state counter
         case "incomingCounter":
           console.log("change counter:", msg.data);
           this.setState({counter: msg.data});
@@ -61,6 +61,9 @@ class App extends Component {
     );
   }
 
+  // this function fired by CharBar component
+  // sends the new current user name to server
+  // update state currentUser
   _updateUser = (username) => {
     const newMsg = {
       type: "postNotification",
@@ -73,6 +76,8 @@ class App extends Component {
     this.setState({currentUser: {name: username}});
   }
 
+  // this function fired by CharBar component
+  // send the new message to server
   _addMessage = (username, content) => {
     const newMsg = {
       type: "postMessage",
